@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as CartActions from '../../store/modules/cart/actions';
+import * as NavActions from '../../store/modules/navigation/actions';
+
 import api from '../../services/api';
 
 import {
@@ -36,8 +38,14 @@ class Home extends Component {
     this.setState({ products: data });
   }
 
+  handleAdd(id) {
+    const { cartActions, navActions } = this.props;
+    cartActions.addToCartRequest(id);
+    navActions.toggleCart();
+  }
+
   render() {
-    const { navigation, addToCart, amount } = this.props;
+    const { navigation, amount } = this.props;
     const { products } = this.state;
 
     return (
@@ -56,7 +64,7 @@ class Home extends Component {
                     <ProductTitle>{product.title}</ProductTitle>
                   </TitleContainer>
                   <ProductPrice>{product.priceFormatted}</ProductPrice>
-                  <ProductButton onPress={() => addToCart(product)}>
+                  <ProductButton onPress={() => this.handleAdd(product.id)}>
                     <ProductButtonCounter>
                       <Icon name="add-shopping-cart" color="#fff" size={22} />
                       <ButtonCount>{amount[product.id] || 0}</ButtonCount>
@@ -82,7 +90,8 @@ const mapStateToProps = state => ({
   }, {}),
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
+const mapDispatchToProps = dispatch => ({
+  cartActions: bindActionCreators(CartActions, dispatch),
+  navActions: bindActionCreators(NavActions, dispatch),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

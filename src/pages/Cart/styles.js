@@ -118,3 +118,19 @@ export const CheckoutButton = styled.TouchableOpacity`
 `;
 
 export const CartButton = styled.TouchableOpacity``;
+
+export const EmptyContainer = styled.View`
+  margin-top: 30px;
+  background-color: #fff;
+  width: 360px;
+  height: 300px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+`;
+
+export const EmptyText = styled.Text`
+  font-weight: bold;
+  font-size: 40px;
+  margin-top: 20px;
+`;
