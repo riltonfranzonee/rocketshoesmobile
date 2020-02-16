@@ -1,6 +1,5 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as NavActions from '../../store/modules/navigation/actions';
@@ -16,14 +15,18 @@ import {
   CounterText,
 } from './styles';
 
-function NavHeader({ cart, toggleHome, toggleCart }) {
+export default function NavHeader() {
+  const cart = useSelector(state => state.cart);
+
+  const dispatch = useDispatch();
+
   const screenWidth = Math.round(Dimensions.get('window').width);
   return (
     <Header screenWidth={screenWidth}>
-      <HomeNav onPress={() => toggleHome()}>
+      <HomeNav onPress={() => dispatch(NavActions.toggleHome())}>
         <LogoImage source={logo} />
       </HomeNav>
-      <CartNav onPress={() => toggleCart()}>
+      <CartNav onPress={() => dispatch(NavActions.toggleCart())}>
         <Icon name="shopping-basket" color="#fff" size={28} />
         <Counter>
           <CounterText>{cart.length}</CounterText>
@@ -32,12 +35,3 @@ function NavHeader({ cart, toggleHome, toggleCart }) {
     </Header>
   );
 }
-
-const mapStateToProps = state => ({
-  cart: state.cart,
-  navigation: state.navigation,
-});
-
-const mapDispatchToProps = dispatch => bindActionCreators(NavActions, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavHeader);
